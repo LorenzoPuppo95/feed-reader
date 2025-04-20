@@ -1,7 +1,8 @@
-<mat-grid-list id="feed-container" cols="2" rowHeight="2:1">
-    <mat-grid-tile>1</mat-grid-tile>
-    <mat-grid-tile>2</mat-grid-tile>
-    <mat-grid-tile>3</mat-grid-tile>
-    <mat-grid-tile>4</mat-grid-tile>
+<mat-grid-list cols="2" rowHeight="fit" gutterSize="16px">
+	<mat-grid-tile *ngFor="let feed of feeds">
+		<div class="feed-card">
+			<h3>{{ feed.title }}</h3>
+			<p>{{ feed.description }}</p>
+		</div>
+	</mat-grid-tile>
 </mat-grid-list>
-  

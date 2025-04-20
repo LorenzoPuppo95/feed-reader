@@ -1,35 +1,21 @@
-import { Component } from '@angular/core';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { Component, OnInit } from '@angular/core';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { DataService } from '../../services/dataservice.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-homepage',
-  imports: [MatGridListModule],
-  templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.scss'
+	selector: 'app-homepage',
+	imports: [MatGridListModule, CommonModule],
+	templateUrl: './homepage.component.html',
+	styleUrl: './homepage.component.scss'
 })
 
-export class HomepageComponent {
-  rssFeed: string = '';
-  constructor(private dataService: DataService) {}
+export class HomepageComponent implements OnInit {
+	feeds: any[] = [];
 
+	constructor(private dataService: DataService) { }
 
-  data: any;
-
-  ngOnInit(): void {
-    this.data = this.dataService.getData();
-    render(this.data);
-  }
+	async ngOnInit(): Promise<void> {
+		this.feeds = await this.dataService.getData();
+	}
 }
-
-function render(data: any) {
-  const feedContainer = document.getElementById('feed-container');
-  if (feedContainer) {
-    feedContainer.innerHTML = '';
-    const items = data['activeElement']['innerHtml'].querySelectorAll('item');
-    items.forEach((item: any) => {
-      
-    });
-  }
-}
-

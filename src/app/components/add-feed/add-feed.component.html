@@ -1,0 +1,37 @@
+<form [formGroup]="feedForm" (ngSubmit)="onSubmit()">
+	<mat-form-field appearance="outline">
+		<mat-label>Nome Feed</mat-label>
+		<input matInput formControlName="name">
+	</mat-form-field>
+
+	<mat-form-field appearance="fill">
+		<mat-label>Tipo feed</mat-label>
+		<mat-select formControlName="type">
+			<mat-option value="rss">RSS</mat-option>
+			<mat-option value="reddit">Reddit</mat-option>
+		</mat-select>
+	</mat-form-field>
+
+	<div formArrayName="categories">
+		<div *ngFor="let cat of categories.controls; let i = index">
+			<mat-form-field appearance="fill">
+				<input matInput [formControlName]="i" placeholder="Categoria">
+			</mat-form-field>
+			<button mat-button color="warn" (click)="removeCategory(i)">Rimuovi</button>
+		</div>
+	</div>
+
+	<button mat-raised-button color="accent" (click)="addCategory()">
+		+ Aggiungi Categoria
+	</button>
+
+
+	<mat-form-field appearance="fill">
+		<mat-label>{{ feedForm.value.type === 'reddit' ? 'Nome Subreddit' : 'URL RSS' }}</mat-label>
+		<input matInput formControlName="value" required>
+	</mat-form-field>
+
+	<button mat-raised-button color="primary" type="submit" [disabled]="feedForm.invalid">
+		Salva Feed
+	</button>
+</form>
