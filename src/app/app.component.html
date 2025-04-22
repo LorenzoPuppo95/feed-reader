@@ -1,3 +1,10 @@
-<app-header></app-header>
+<mat-sidenav-container class="sidenav-container">
+	<mat-sidenav-content>
+		<app-header (sidenavBtnClicked)="drawer.toggle()"></app-header>
 
-<router-outlet />
+		<router-outlet></router-outlet>
+	</mat-sidenav-content>
+	<mat-sidenav #drawer mode="over" position="end">
+		<app-drawer></app-drawer> <!-- Nessuna logica di apertura qui dentro -->
+	</mat-sidenav>
+</mat-sidenav-container>

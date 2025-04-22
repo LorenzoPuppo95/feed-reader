@@ -16,6 +16,13 @@ export class HomepageComponent implements OnInit {
 	constructor(private dataService: DataService) { }
 
 	async ngOnInit(): Promise<void> {
-		this.feeds = await this.dataService.getData();
-	}
+		try {
+		  this.feeds = await this.dataService.getData();
+		  console.log('FEED CARICATI:', this.feeds);
+		} catch (e) {
+		  console.error('Errore nel caricamento dei feed:', e);
+		  this.feeds = [];
+		}
+	  }
+	  
 }
