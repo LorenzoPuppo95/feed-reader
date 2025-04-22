@@ -1,22 +1,29 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from "./components/header/header.component";
-import { HomepageComponent } from "./components/homepage/homepage.component";
-import { DrawerComponent } from "./components/drawer/drawer.component";
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { Component, signal } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
+import { HeaderComponent } from './components/header/header.component';
+import { DrawerComponent } from './components/drawer/drawer.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, MatSidenavModule, DrawerComponent, HomepageComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+	selector: 'app-root',
+	standalone: true,
+	imports: [RouterOutlet, HeaderComponent, MatSidenavModule, DrawerComponent, HomepageComponent, CommonModule],
+	templateUrl: './app.component.html',
+	styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'feed-reader';
+	constructor(private router: Router) {}
 
-  isHomeSidenavOpen = false;
+	currentFeedName = signal('ALL');
 
-  openSidenav() {
-    this.isHomeSidenavOpen = !this.isHomeSidenavOpen;
-  }
+	onFeedSelected(feedName: string) {
+		console.log('Hai cliccato il feed:', feedName);
+		this.currentFeedName.set(feedName);
+	}
+
+	isHomepage(): boolean {
+        return this.router.url === '/';
+    }
 }

@@ -1,5 +1,10 @@
 <mat-nav-list>
-	<mat-list-item *ngFor="let feed of feeds">
+	<mat-list-item (click)="selectFeed('ALL')" [class.selected]="selected === 'ALL'">
+		📋 Vedi tutti
+	</mat-list-item>
+
+	<mat-list-item *ngFor="let feed of feeds" (click)="selectFeed(feed)"
+		[class.selected]="selected === getFeedKey(feed)">
 		{{ feed.name }}
 	</mat-list-item>
 </mat-nav-list>

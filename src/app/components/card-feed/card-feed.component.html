@@ -2,6 +2,9 @@
 	<h2 class="title">{{ post().title }}</h2>
 	<p class="description">{{ post().description }}</p>
 	<p class="publish-date">{{ post().pubDate }}</p>
+
+	<img *ngIf="post().image && post().image !== 'self' && post().image !== 'default'" [src]="post().image" alt="Image" />
+
 	<div class="buttons">
 		<button (click)="saveFavorite()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
 			<mat-icon>favorite</mat-icon>

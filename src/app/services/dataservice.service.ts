@@ -5,6 +5,7 @@ export class DataService {
 	constructor() { }
 
 	async getData(): Promise<any[]> {
+
 		const feeds = this.getSavedFeeds();
 		const allPosts: any[] = [];
 
@@ -75,11 +76,14 @@ export class DataService {
 		const name = subreddit?.trim().replace(/^r\//i, '');
 		const res = await fetch(`https://www.reddit.com/r/${name}.json`);
 		const json = await res.json();
+
 		return json.data.children.map((child: any) => ({
 			title: child.data.title,
 			description: child.data.selftext || '',
 			link: `https://reddit.com${child.data.permalink}`,
-			pubDate: new Date(child.data.created_utc * 1000).toUTCString()
+			pubDate: new Date(child.data.created_utc * 1000).toUTCString(),
+			image: child.data.thumbnail, // aggiungi l'immagine
 		}));
 	}
+
 }

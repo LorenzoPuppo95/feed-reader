@@ -1,3 +1,3 @@
 <div class="feed-list">
-	<app-card-feed *ngFor="let feed of feeds" [post]="feed" />
+	<app-card-feed *ngFor="let feed of filteredFeeds()" [post]="feed" />
 </div>

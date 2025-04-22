@@ -1,29 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, computed, inject, OnInit } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { DataService } from '../../services/dataservice.service';
 import { CommonModule } from '@angular/common';
 import { CardFeedComponent } from '../card-feed/card-feed.component';
+import { DataService } from '../../services/dataservice.service';
 
 @Component({
 	selector: 'app-homepage',
-	imports: [MatGridListModule, CommonModule, CardFeedComponent],
+	standalone: true,
+	imports: [CommonModule, MatGridListModule, CardFeedComponent],
 	templateUrl: './homepage.component.html',
 	styleUrl: './homepage.component.scss'
 })
-
 export class HomepageComponent implements OnInit {
+	private dataService = inject(DataService);
 	feeds: any[] = [];
+	selectedFeedName = input<string>('ALL');
 
-	constructor(private dataService: DataService) { }
+	filteredFeeds = computed(() => {
+		const selected = this.selectedFeedName();
+		if (!selected || selected === 'ALL') return this.feeds;
+		return this.feeds.filter(f => f.source === selected);
+	});
 
-	async ngOnInit(): Promise<void> {
-		try {
-		  this.feeds = await this.dataService.getData();
-		  console.log('FEED CARICATI:', this.feeds);
-		} catch (e) {
-		  console.error('Errore nel caricamento dei feed:', e);
-		  this.feeds = [];
-		}
-	  }
-	  
+	async ngOnInit() {
+		this.feeds = await this.dataService.getData();
+	}
 }
