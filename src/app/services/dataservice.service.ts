@@ -46,19 +46,21 @@ export class DataService {
 	}
 
 	private async parseRss(url: string): Promise<any[]> {
-		if (!url?.startsWith('http')) { //controlla che l'url sia valido, se non lo è restituisce un array vuoto
-			return []; //perché array vuoto? perché parseRss() promette any array di oggetti e se c'è un problema l'array sarà vuoto per l'appunto
+		if (!url?.startsWith('http')) {
+			return [];
 		}
 
 		try {
-			const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // per aggirare i CORS bisogna fare un proxy proprio (server.js per es.) e sostituire questo link - ilsecolo e compagnia non funzionano
-			const response = await fetch(proxyUrl);
-			const { contents: xmlText } = await response.json();
+			const response = await fetch(url);
+			const xmlText = await response.text();
 
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
 
-			if (xmlDoc.querySelector('parsererror')) return [];
+			if (xmlDoc.querySelector('parsererror')) {
+				console.warn('Parsing RSS fallito:', xmlDoc.querySelector('parsererror')?.textContent);
+				return [];
+			}
 
 			return Array.from(xmlDoc.querySelectorAll('item')).map(item => ({
 				title: item.querySelector('title')?.textContent || '',
@@ -67,10 +69,11 @@ export class DataService {
 				pubDate: item.querySelector('pubDate')?.textContent || ''
 			}));
 		} catch (err) {
-			console.error('Errore parsing RSS:', err);
+			console.error('Errore nel fetch RSS:', err);
 			return [];
 		}
 	}
+
 
 	private async parseReddit(subreddit: string): Promise<any[]> {
 		const name = subreddit?.trim().replace(/^r\//i, '');
